@@ -3,11 +3,7 @@ import { ApiError } from '../exceptions/api.error'
 import { TokenService } from '../services/token.service'
 
 export const roleMiddleWare = (roles: string[]) => {
-	return function (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) {
+	return function(req: Request, res: Response, next: NextFunction) {
 		try {
 			if (req.method === 'OPTIONS') {
 				next()
@@ -25,27 +21,28 @@ export const roleMiddleWare = (roles: string[]) => {
 				throw next(ApiError.UnautorizedError())
 			}
 
-			const { roles: userRoles } = TokenService.validateAccessToken(access_token)
+			const { roles: userRoles } =
+				TokenService.validateAccessToken(access_token)
 
 			if (!userRoles) {
 				throw next(ApiError.UnautorizedError())
 			}
 
-      let hasRole = false
+			let hasRole = false
 
-      userRoles.forEach(role => {
-        if (roles.includes(role)) {
-          hasRole =  true
-        }
-      })
+			userRoles.forEach(role => {
+				if (roles.includes(role)) {
+					hasRole = true
+				}
+			})
 
-      if (!hasRole) {
-        throw next(ApiError.Forbidden('You don\'t have access!'))
-      }
+			if (!hasRole) {
+				throw next(ApiError.Forbidden('You don"t have access!'))
+			}
 
 			next()
 		} catch (error) {
-      throw next(ApiError.UnautorizedError())
-    }
+			throw next(ApiError.UnautorizedError())
+		}
 	}
 }

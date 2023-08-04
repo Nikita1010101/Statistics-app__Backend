@@ -27,7 +27,7 @@ export const authMiddleWare = (
 			throw next(ApiError.UnautorizedError())
 		}
 
-		;(req as Request & { user: IUserDto }).user = user
+		(req as Request & { user: IUserDto }).user = user
 
 		next()
 	} catch (error) {

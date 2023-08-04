@@ -10,14 +10,23 @@ export class UserDto {
 	public fired: boolean
 	public roles: string[]
 
-	constructor({ id, full_name, birth_date, position, salary_amount, hire_data, fired, roles }: IUser) {
-		this.id = id
+	constructor({
+		id,
+		full_name,
+		birth_date,
+		position,
+		salary_amount,
+		hire_data,
+		fired,
+		roles
+	}: IUser) {
+		this.id = Number(id)
 		this.full_name = full_name
 		this.birth_date = birth_date
 		this.position = position
 		this.salary_amount = salary_amount
 		this.hire_data = hire_data
 		this.fired = fired
-		this.roles = roles
+		this.roles = roles || ([] as string[])
 	}
 }

@@ -1,12 +1,12 @@
 import { Model } from 'sequelize'
 import jwt from 'jsonwebtoken'
 
-import { IUser, IUserDto } from '../types/user.type'
+import { IUserDto } from '../types/user.type'
 import { TokenModel } from '../models/index.model'
 import { IToken } from '../types/token.type'
 
 class TokenServiceClass {
-	generateTokens(user: Omit<IUser, 'password'>) {
+	generateTokens(user: IUserDto) {
 		const payload = { ...user }
 		const access_token = jwt.sign(
 			payload,
@@ -17,7 +17,7 @@ class TokenServiceClass {
 		)
 
 		const refresh_token = jwt.sign(
-			user,
+			payload,
 			String(process.env.JWT_REFRESh_SECRET_KEY),
 			{
 				expiresIn: '15d'
@@ -65,6 +65,14 @@ class TokenServiceClass {
 		const token = await TokenModel.create<Model<IToken>>({
 			refresh_token,
 			userId: user_id
+		})
+
+		return token
+	}
+
+	async findToken(refresh_token: string) {
+		const token = await TokenModel.findOne<Model<IToken>>({
+			where: { refresh_token }
 		})
 
 		return token

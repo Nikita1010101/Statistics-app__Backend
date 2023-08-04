@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator'
 
 import { ApiError } from '../exceptions/api.error'
 import { UserService } from '../services/user.service'
-import { IUser } from '../types/user.type'
+import { IUser, IUserDto } from '../types/user.type'
 
 class UserConstrollerClass {
 	static setCookie(res: Response, refresh_token: string) {
@@ -31,10 +31,28 @@ class UserConstrollerClass {
 		res: Response,
 		next: NextFunction
 	) => {
-		const statistics = await UserService.getUsersStatistics()
+		try {
+			const statistics = await UserService.getUsersStatistics()
 
 			res.send(statistics)
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	refresh: RequestHandler = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
 		try {
+			const { refresh_token } = req.cookies as { refresh_token: string }
+
+			const user = await UserService.refresh(refresh_token)
+
+			UserConstrollerClass.setCookie(res, user.refresh_token)
+
+			res.send(user)
 		} catch (error) {
 			next(error)
 		}
@@ -45,18 +63,18 @@ class UserConstrollerClass {
 		res: Response,
 		next: NextFunction
 	) => {
-		const errors = validationResult(req)
-
-		if (!errors.isEmpty()) {
-			throw ApiError.BadRequest('Don\'t correct email or password!')
-		}
-
-		const body = req.body as IUser
-
-		const link = await UserService.addUser(body)
-
-		res.send(link)
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				throw ApiError.BadRequest('Dont correct email or password!')
+			}
+
+			const body = req.body as IUserDto & { userRoles: string[] }
+
+			const link = await UserService.addUser(body)
+
+			res.send(link)
 		} catch (error) {
 			next(error)
 		}
@@ -85,9 +103,9 @@ class UserConstrollerClass {
 	) => {
 		try {
 			const body = req.body as IUser
-			
-			const user = await UserService.editUser(body) 
-			
+
+			const user = await UserService.editUser(body)
+
 			res.send(user)
 		} catch (error) {
 			next(error)
@@ -99,12 +117,14 @@ class UserConstrollerClass {
 		res: Response,
 		next: NextFunction
 	) => {
-		const { id, password } = req.body as IUser
-
-		const user = await UserService.login(id, String(password))
-
-		UserConstrollerClass.setCookie(res, user.refresh_token)
 		try {
+			const { id, password } = req.body as IUser
+
+			const user = await UserService.login(Number(id), String(password))
+
+			UserConstrollerClass.setCookie(res, user.refresh_token)
+
+			res.send(user)
 		} catch (error) {
 			next(error)
 		}
@@ -133,14 +153,15 @@ class UserConstrollerClass {
 		res: Response,
 		next: NextFunction
 	) => {
-		const { id, password } = req.body as IUser
-
-		await UserService.setPassword(id, String(password))
-
-		const redirect_path = `${process.env.CLIENT_URL}/login`
-
-		res.redirect(redirect_path)
 		try {
+			const { id, password } = req.body as IUser
+
+			await UserService.setPassword(Number(id), String(password))
+
+			res.send('All ok)')
+			const redirect_path = `${process.env.CLIENT_URL}/login`
+
+			res.redirect(redirect_path)
 		} catch (error) {
 			next(error)
 		}

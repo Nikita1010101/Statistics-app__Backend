@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize'
 export const userModelData = {
 	id: {
 		type: DataTypes.INTEGER,
-		primarykey: true,
+		primaryKey: true,
 		autoIncrement: true,
 		allowNull: false
 	},

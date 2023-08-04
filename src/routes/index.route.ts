@@ -19,6 +19,12 @@ router.get(
 	roleMiddleWare(['HR']),
 	UserConstroller.getUsersStatistics
 )
+router.get(
+	'/refersh',
+	authMiddleWare,
+	roleMiddleWare(['EMPLOYEE', 'HR']),
+	UserConstroller.refresh
+)
 
 router.post(
 	'/add',

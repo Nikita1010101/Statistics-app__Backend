@@ -7,5 +7,5 @@ export const tokenModelData = {
 		autoIncrement: true,
 		allowNull: false
 	},
-  refresh_token: { type: DataTypes.STRING, allowNull: false }
+  refresh_token: { type: DataTypes.STRING, unique: true, allowNull: false }
 }

@@ -7,6 +7,7 @@ import express from 'express'
 import { authRouter } from './routes/index.route'
 import { authMiddleWare } from './middlewares/auth.middleware'
 import { roleMiddleWare } from './middlewares/role.middleware'
+import { sequelize } from './db'
 
 const PORT = process.env.PORT || 7000
 
@@ -26,11 +27,14 @@ app.use(roleMiddleWare)
 
 const start = async () => {
 	try {
+		await sequelize.authenticate()
+		await sequelize.sync()
+
 		app.listen(PORT, () => {
 			console.log(`Сервер успешно запущен на ${PORT} порту!`)
 		})
 	} catch (error) {
-		throw error
+		throw new Error()
 	}
 }
 

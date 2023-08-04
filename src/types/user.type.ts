@@ -1,14 +1,12 @@
-import { Model } from "sequelize"
-
 export interface IUserDto {
-	id: number
+	id?: number
 	full_name: string
 	birth_date: string
 	position: string
 	salary_amount: number
 	hire_data: string
 	fired: boolean
-	roles: string[]
+	roles?: string[]
 }
 
 export interface IUser extends IUserDto {
@@ -18,7 +16,6 @@ export interface IUser extends IUserDto {
 export interface IStatistics {
 	hired_employees: number
 	fired_employees: number
-	upcomingSalaries: Model<IUser>[]
-	upcomingBirthdays: Model<IUser>[]
+	upcomingSalaries: Pick<IUser, 'birth_date' | 'salary_amount'>[]
+	upcomingBirthdays: IUser[]
 }
-
