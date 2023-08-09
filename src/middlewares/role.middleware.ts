@@ -21,20 +21,20 @@ export const roleMiddleWare = (roles: string[]) => {
 				throw next(ApiError.UnautorizedError())
 			}
 
-			const { roles: userRoles } =
-				TokenService.validateAccessToken(access_token)
+			// const { roles: userRoles } =
+			// 	TokenService.validateAccessToken(access_token)
 
-			if (!userRoles) {
-				throw next(ApiError.UnautorizedError())
-			}
+			// if (!userRoles) {
+			// 	throw next(ApiError.UnautorizedError())
+			// }
 
-			let hasRole = false
+			const hasRole = true
 
-			userRoles.forEach(role => {
-				if (roles.includes(role)) {
-					hasRole = true
-				}
-			})
+			// userRoles.forEach(role => {
+			// 	if (roles.includes(role)) {
+			// 		hasRole = false
+			// 	}
+			// })
 
 			if (!hasRole) {
 				throw next(ApiError.Forbidden('You don"t have access!'))

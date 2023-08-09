@@ -12,25 +12,25 @@ export const authMiddleWare = (
 		const autorization_header = req.headers.authorization
 
 		if (!autorization_header) {
-			throw next(ApiError.UnautorizedError())
+			return next(ApiError.UnautorizedError())
 		}
 
 		const access_token = autorization_header.split(' ')[1]
 
 		if (!access_token) {
-			throw next(ApiError.UnautorizedError())
+			return next(ApiError.UnautorizedError())
 		}
 
 		const user = TokenService.validateAccessToken(access_token)
 
 		if (!user) {
-			throw next(ApiError.UnautorizedError())
+			return next(ApiError.UnautorizedError())
 		}
 
-		(req as Request & { user: IUserDto }).user = user
+		;(req as Request & { user: IUserDto }).user = user as IUserDto
 
 		next()
 	} catch (error) {
-		next(ApiError.UnautorizedError())
+		return next(ApiError.UnautorizedError())
 	}
 }

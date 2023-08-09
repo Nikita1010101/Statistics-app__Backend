@@ -19,3 +19,8 @@ export interface IStatistics {
 	upcomingSalaries: Pick<IUser, 'birth_date' | 'salary_amount'>[]
 	upcomingBirthdays: IUser[]
 }
+
+export interface ILoginBody {
+	user_id: number
+	password: string
+}

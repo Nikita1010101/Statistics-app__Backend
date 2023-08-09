@@ -12,7 +12,7 @@ class TokenServiceClass {
 			payload,
 			String(process.env.JWT_ACCESS_SECRET_KEY),
 			{
-				expiresIn: '15m'
+				expiresIn: '15s'
 			}
 		)
 
@@ -34,9 +34,9 @@ class TokenServiceClass {
 				String(process.env.JWT_ACCESS_SECRET_KEY)
 			)
 
-			return is_access_token as IUserDto
+			return is_access_token
 		} catch (error) {
-			throw null
+			return null
 		}
 	}
 
@@ -47,7 +47,7 @@ class TokenServiceClass {
 				String(process.env.JWT_REFRESH_SECRET_KEY)
 			)
 
-			return is_refresh_token as IUserDto
+			return is_refresh_token
 		} catch (error) {
 			return null
 		}
@@ -55,7 +55,7 @@ class TokenServiceClass {
 
 	async saveToken(refresh_token: string, user_id: number) {
 		const existing_token = await TokenModel.findOne<Model<IToken>>({
-			where: { refresh_token }
+			where: { userId: user_id }
 		})
 
 		if (existing_token) {
@@ -79,7 +79,9 @@ class TokenServiceClass {
 	}
 
 	async removeToken(refresh_token: string) {
-		const token = await TokenModel.destroy({ where: { refresh_token } })
+		const token = await TokenModel.destroy<Model<IToken>>({
+			where: { refresh_token }
+		})
 		return token
 	}
 }
