@@ -18,7 +18,7 @@ class TokenServiceClass {
 
 		const refresh_token = jwt.sign(
 			payload,
-			String(process.env.JWT_REFRESh_SECRET_KEY),
+			String(process.env.JWT_REFRESH_SECRET_KEY),
 			{
 				expiresIn: '15d'
 			}

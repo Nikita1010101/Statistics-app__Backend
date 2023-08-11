@@ -9,14 +9,14 @@ const router = Router()
 router.get(
 	'/users',
 	authMiddleWare,
-	// roleMiddleWare(['EMPLOYEE', 'HR']),
+	roleMiddleWare(['EMPLOYEE', 'HR']),
 	UserConstroller.getUsers
 )
 router.get(
 	'/statistics',
 	authMiddleWare,
 	roleMiddleWare(['HR']),
-	UserConstroller.getUsersStatistics
+	UserConstroller.getStatistics
 )
 
 router.post(
@@ -33,10 +33,11 @@ router.patch(
 	UserConstroller.editUser
 )
 
-router.delete(
-	'/delete',
+router.post(
+	'/remove',
 	authMiddleWare,
 	roleMiddleWare(['HR']),
-	UserConstroller.deleteUser
+	UserConstroller.removeUser
 )
+
 export const userRouter = router

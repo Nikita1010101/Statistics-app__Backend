@@ -38,14 +38,15 @@ class AuthServiceClass {
 		}
 
 		const is_valid_token = TokenService.validateRefreshToken(refresh_token)
-		// const tokeb_from_db = await TokenService.findToken(refresh_token)
+		const token_from_db = await TokenService.findToken(refresh_token)
 
-		if (!is_valid_token) {
+		if (!is_valid_token || !token_from_db) {
 			throw ApiError.UnautorizedError()
 		}
 
 		const user = await UserModel.findOne<Model<IUser>>({
-			where: { id: 9 }
+			where: { id: token_from_db.dataValues.userId },
+			include: { model: RoleModel, as: 'roles' }
 		})
 
 		if (!user) {

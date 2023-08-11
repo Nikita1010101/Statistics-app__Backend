@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { ILoginBody, IUser } from '../types/user.type'
+
 import { AuthService } from '../services/auth.service'
+import { ILoginBody } from '../types/auth.type'
 
 class AuthControllerClass {
 	static setCookie(res: Response, refresh_token: string) {
@@ -52,13 +53,11 @@ class AuthControllerClass {
 		next: NextFunction
 	) => {
 		try {
-			const { id, password } = req.body as IUser
+			const { user_id, password } = req.body as ILoginBody
 
-			await AuthService.setPassword(Number(id), String(password))
+			await AuthService.setPassword(Number(user_id), String(password))
 
-			const redirect_path = `${process.env.CLIENT_URL}/login`
-
-			res.redirect(redirect_path)
+			res.send({})
 		} catch (error) {
 			next(error)
 		}

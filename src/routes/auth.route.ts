@@ -4,13 +4,13 @@ import { body } from 'express-validator'
 
 const router = Router()
 
+router.get('/refresh', AuthController.refresh)
+
 router.post(
 	'/password',
 	body('password').isLength({ min: 8, max: 32 }),
 	AuthController.setPassword
 )
-router.get('/refresh', AuthController.refresh)
-
 router.post(
 	'/login',
 	body('user_id').isInt(),
@@ -19,8 +19,6 @@ router.post(
 )
 router.delete(
 	'/logout',
-	// authMiddleWare,
-	// roleMiddleWare(['EMPLOYEE', 'HR']),
 	AuthController.logout
 )
 

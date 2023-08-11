@@ -1,3 +1,4 @@
+import { IRole } from '../types/role.type'
 import { IUser } from '../types/user.type'
 
 export class UserDto {
@@ -6,9 +7,9 @@ export class UserDto {
 	public birth_date: string
 	public position: string
 	public salary_amount: number
-	public hire_data: string
+	public hire_date: string
 	public fired: boolean
-	public roles: string[]
+	public roles: IRole[]
 
 	constructor({
 		id,
@@ -16,7 +17,7 @@ export class UserDto {
 		birth_date,
 		position,
 		salary_amount,
-		hire_data,
+		hire_date,
 		fired,
 		roles
 	}: IUser) {
@@ -25,8 +26,8 @@ export class UserDto {
 		this.birth_date = birth_date
 		this.position = position
 		this.salary_amount = salary_amount
-		this.hire_data = hire_data
+		this.hire_date = hire_date
 		this.fired = fired
-		this.roles = roles || ([] as string[])
+		this.roles = roles || ([] as IRole[])
 	}
 }

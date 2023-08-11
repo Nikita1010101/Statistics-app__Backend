@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator'
 
 import { ApiError } from '../exceptions/api.error'
 import { UserService } from '../services/user.service'
-import { IUser, IUserDto } from '../types/user.type'
+import { IAddUser, IEditUser } from '../types/user.type'
 
 class UserControllerClass {
 	getUsers: RequestHandler = async (
@@ -19,13 +19,13 @@ class UserControllerClass {
 		}
 	}
 
-	getUsersStatistics: RequestHandler = async (
+	getStatistics: RequestHandler = async (
 		req: Request,
 		res: Response,
 		next: NextFunction
 	) => {
 		try {
-			const statistics = await UserService.getUsersStatistics()
+			const statistics = await UserService.getStatistics()
 
 			res.send(statistics)
 		} catch (error) {
@@ -47,7 +47,7 @@ class UserControllerClass {
 				throw ApiError.BadRequest('Dont correct email or password!')
 			}
 
-			const body = req.body as IUserDto & { userRoles: string[] }
+			const body = req.body as IAddUser
 
 			const link = await UserService.addUser(body)
 
@@ -57,7 +57,7 @@ class UserControllerClass {
 		}
 	}
 
-	deleteUser: RequestHandler = async (
+	removeUser: RequestHandler = async (
 		req: Request,
 		res: Response,
 		next: NextFunction
@@ -79,7 +79,7 @@ class UserControllerClass {
 		next: NextFunction
 	) => {
 		try {
-			const body = req.body as IUser
+			const body = req.body as IEditUser
 
 			const user = await UserService.editUser(body)
 

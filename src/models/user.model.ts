@@ -11,7 +11,7 @@ export const userModelData = {
 	birth_date: { type: DataTypes.DATE, allowNull: false },
 	position: { type: DataTypes.STRING, allowNull: false },
 	salary_amount: { type: DataTypes.INTEGER, allowNull: false },
-	hire_data: { type: DataTypes.DATE, allowNull: false },
+	hire_date: { type: DataTypes.DATE, allowNull: false },
 	password: { type: DataTypes.STRING },
 	fired: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 }

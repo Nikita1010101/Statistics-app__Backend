@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
+
 import { ApiError } from '../exceptions/api.error'
 import { TokenService } from '../services/token.service'
-import { IUserDto } from '../types/user.type'
 
 export const authMiddleWare = (
 	req: Request,
@@ -26,8 +26,6 @@ export const authMiddleWare = (
 		if (!user) {
 			return next(ApiError.UnautorizedError())
 		}
-
-		;(req as Request & { user: IUserDto }).user = user as IUserDto
 
 		next()
 	} catch (error) {
